@@ -72,3 +72,4 @@ export default defineConfig([
 ])
 ```
 # landing-page
+# prevai-landing-page
