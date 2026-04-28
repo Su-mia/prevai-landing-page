@@ -1,113 +1,142 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Stethoscope, User, Dna, Activity, Brain, Eye, Shield, Cpu } from 'lucide-react'
-
-const agents = [
-  { icon: <Dna size={13} />, label: 'Genomic', angle: 0 },
-  { icon: <Activity size={13} />, label: 'Clinical', angle: 60 },
-  { icon: <Brain size={13} />, label: 'Cognitive', angle: 120 },
-  { icon: <Eye size={13} />, label: 'Imaging', angle: 180 },
-  { icon: <Shield size={13} />, label: 'Risk', angle: 240 },
-  { icon: <Cpu size={13} />, label: 'Metabolic', angle: 300 },
-]
+import { Stethoscope, User, Activity, Brain } from 'lucide-react'
 
 const features = [
   {
     title: 'Real-Time Health Streams',
     desc: 'Continuous monitoring of 200+ biomarkers across genomic, metabolic, and clinical domains simultaneously.',
     color: 'bg-brand-brightblue/10 text-brand-brightblue',
+    icon: <Activity size={18} />,
   },
   {
     title: 'Cross-Domain Synthesis',
     desc: 'Agents collaborate to surface correlations invisible to single-specialty care — the way a team of specialists would.',
     color: 'bg-brand-green/10 text-brand-green',
+    icon: <Brain size={18} />,
   },
   {
     title: 'Physician-Grade Insights',
-    desc: 'Every recommendation arrives with full chain-of-thought reasoning, evidence citations, and confidence scores for clinician review.',
+    desc: 'Every recommendation arrives with full chain-of-thought reasoning, evidence citations, and confidence scores.',
     color: 'bg-purple-100 text-purple-600',
+    icon: <Stethoscope size={18} />,
   },
   {
     title: 'Patient-Centered Delivery',
     desc: "Complex insights translated into actionable, compassionate guidance at the patient's literacy level.",
     color: 'bg-orange-100 text-orange-600',
+    icon: <User size={18} />,
   },
 ]
 
+// Node positions at radius=115 around center (140,140), 60° apart
+const NODES = [
+  { cx: 255,   cy: 140,   color: '#1B3FBE', label: 'Genomic' },
+  { cx: 197.5, cy: 239.6, color: '#00d4a0', label: 'Clinical' },
+  { cx: 82.5,  cy: 239.6, color: '#8b5cf6', label: 'Cognitive' },
+  { cx: 25,    cy: 140,   color: '#f59e0b', label: 'Imaging' },
+  { cx: 82.5,  cy: 40.4,  color: '#ef4444', label: 'Risk' },
+  { cx: 197.5, cy: 40.4,  color: '#06b6d4', label: 'Metabolic' },
+]
+
 const AgentOrb = () => (
-  <div className="relative w-48 h-48 md:w-64 md:h-64 flex-shrink-0">
-    {/* Outer ring */}
-    <motion.div
-      animate={{ rotate: 360 }}
-      transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-      className="absolute inset-0 rounded-full border border-dashed border-brand-brightblue/30"
-    />
-    {/* Middle ring */}
-    <motion.div
-      animate={{ rotate: -360 }}
-      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-      className="absolute inset-4 rounded-full border border-dashed border-brand-green/20"
-    />
+  /* Pure SVG — zero framer-motion transform conflicts */
+  <div className="relative w-64 h-64 md:w-72 md:h-72 flex-shrink-0 select-none">
+    <svg viewBox="0 0 280 280" width="100%" height="100%" overflow="visible">
+      <defs>
+        <radialGradient id="orbGrad" cx="38%" cy="38%">
+          <stop offset="0%" stopColor="#2B55E8" />
+          <stop offset="100%" stopColor="#1B3FBE" />
+        </radialGradient>
+        <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#1B3FBE" floodOpacity="0.18" />
+        </filter>
+        <filter id="glowBlue">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
 
-    {/* Center orb */}
-    <motion.div
-      animate={{ scale: [1, 1.06, 1] }}
-      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute inset-12 rounded-full bg-gradient-to-br from-brand-blue to-brand-brightblue shadow-2xl shadow-brand-brightblue/40 flex items-center justify-center"
-    >
-      <svg width="40" height="28" viewBox="0 0 40 28" fill="none">
-        <polyline
-          points="1,14 7,14 9,5 12,23 15,8 18,20 21,10 24,17 27,14 39,14"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-        <circle cx="37" cy="14" r="2.5" fill="#00d4a0" />
-      </svg>
-    </motion.div>
+      {/* ── Outer dashed ring (slow CW) ── */}
+      <g>
+        <animateTransform attributeName="transform" type="rotate"
+          from="0 140 140" to="360 140 140" dur="28s" repeatCount="indefinite" />
+        <circle cx="140" cy="140" r="128" stroke="#1B3FBE" strokeWidth="1"
+          strokeDasharray="6 5" fill="none" opacity="0.2" />
+      </g>
 
-    {/* Orbiting agent nodes */}
-    {agents.map((agent, i) => {
-      const rad = (agent.angle * Math.PI) / 180
-      const r = 88
-      const x = Math.cos(rad) * r
-      const y = Math.sin(rad) * r
-      return (
-        <motion.div
-          key={agent.label}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4 + i * 0.1 }}
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%))`,
-          }}
-        >
-          <motion.div
-            animate={{ scale: [1, 1.15, 1] }}
-            transition={{ duration: 2 + i * 0.4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
-            className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white shadow-lg border border-gray-100 flex items-center justify-center text-brand-brightblue"
-            title={agent.label}
-          >
-            {agent.icon}
-          </motion.div>
-        </motion.div>
-      )
-    })}
+      {/* ── Middle dashed ring (CCW) ── */}
+      <g>
+        <animateTransform attributeName="transform" type="rotate"
+          from="0 140 140" to="-360 140 140" dur="20s" repeatCount="indefinite" />
+        <circle cx="140" cy="140" r="100" stroke="#1B3FBE" strokeWidth="0.8"
+          strokeDasharray="3 6" fill="none" opacity="0.12" />
+      </g>
 
-    {/* Pulse rings */}
-    {[0, 1].map((i) => (
-      <motion.div
-        key={i}
-        className="absolute inset-12 rounded-full border-2 border-brand-brightblue/30"
-        animate={{ scale: [1, 2.2], opacity: [0.5, 0] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: i * 1.25 }}
+      {/* ── 6 orbiting agent nodes (all together, CW, 12s) ── */}
+      <g>
+        <animateTransform attributeName="transform" type="rotate"
+          from="0 140 140" to="360 140 140" dur="12s" repeatCount="indefinite" />
+
+        {NODES.map((n, i) => (
+          <g key={i} transform={`translate(${n.cx} ${n.cy})`} filter="url(#nodeShadow)">
+            {/* White pill bg */}
+            <circle r="15" fill="white" stroke="#e8eeff" strokeWidth="1.5" />
+            {/* Colored dot — counter-rotates so it stays a dot (not important for dots) */}
+            <circle r="6" fill={n.color} />
+          </g>
+        ))}
+      </g>
+
+      {/* ── Pulse rings ── */}
+      <circle cx="140" cy="140" r="54" fill="none" stroke="#1B3FBE" strokeWidth="2" opacity="0">
+        <animate attributeName="r" values="54;92" dur="2.6s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.45;0" dur="2.6s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="140" cy="140" r="54" fill="none" stroke="#1B3FBE" strokeWidth="1.5" opacity="0">
+        <animate attributeName="r" values="54;92" dur="2.6s" begin="1.3s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.45;0" dur="2.6s" begin="1.3s" repeatCount="indefinite" />
+      </circle>
+
+      {/* ── Center orb ── */}
+      <circle cx="140" cy="140" r="54" fill="url(#orbGrad)" filter="url(#glowBlue)" />
+
+      {/* Subtle orb breathing */}
+      <circle cx="140" cy="140" r="54" fill="none" stroke="white" strokeWidth="0.5" opacity="0.2">
+        <animate attributeName="r" values="54;57;54" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite" />
+      </circle>
+
+      {/* ── ECG waveform inside orb ── */}
+      <polyline
+        points="111,140 120,140 122,128 126,154 130,126 133,144 136,134 139,140 169,140"
+        stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"
       />
-    ))}
+      <circle cx="167" cy="140" r="3.5" fill="#00d4a0" />
+
+      {/* ── Agent label chips (static, outside the rotating group) ── */}
+      {NODES.map((n, i) => {
+        const rad = (i * 60 * Math.PI) / 180
+        // Place label slightly further out than the orbit radius
+        const lx = 140 + Math.cos(rad) * 148
+        const ly = 140 + Math.sin(rad) * 148
+        return (
+          <text
+            key={`lbl-${i}`}
+            x={lx} y={ly}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="9"
+            fontFamily="Inter, system-ui, sans-serif"
+            fontWeight="600"
+            fill={n.color}
+            opacity="0.85"
+          >
+            {n.label}
+          </text>
+        )
+      })}
+    </svg>
   </div>
 )
 
@@ -122,15 +151,13 @@ const PersonCard = ({
   subtitle: string
   tags: string[]
 }) => (
-  <motion.div
-    className="flex flex-col items-center gap-4 text-center max-w-[160px] md:max-w-[200px]"
-  >
-    <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-brand-lightbg to-white shadow-xl border border-white flex items-center justify-center text-brand-brightblue">
+  <div className="flex flex-col items-center gap-3 text-center w-36 md:w-44 flex-shrink-0">
+    <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-white shadow-lg border border-gray-100 flex items-center justify-center text-brand-brightblue">
       {icon}
     </div>
     <div>
       <p className="font-bold text-brand-navy text-sm md:text-base">{title}</p>
-      <p className="text-xs text-gray-400 mt-1">{subtitle}</p>
+      <p className="text-xs text-gray-400 mt-0.5">{subtitle}</p>
     </div>
     <div className="flex flex-wrap gap-1.5 justify-center">
       {tags.map((t) => (
@@ -139,26 +166,18 @@ const PersonCard = ({
         </span>
       ))}
     </div>
-  </motion.div>
+  </div>
 )
 
 const DataFlow = ({ direction }: { direction: 'ltr' | 'rtl' }) => (
-  <div className="relative w-24 md:w-36 flex items-center justify-center">
-    <div className="w-full h-px bg-gradient-to-r from-brand-brightblue/20 via-brand-green/50 to-brand-brightblue/20" />
+  <div className="relative w-16 md:w-28 flex items-center justify-center flex-shrink-0">
+    <div className="w-full h-px bg-gradient-to-r from-brand-brightblue/20 via-brand-green/60 to-brand-brightblue/20" />
     {[0, 1, 2].map((i) => (
       <motion.div
         key={i}
-        className="absolute w-2 h-2 rounded-full bg-brand-green shadow-md shadow-brand-green/50"
-        animate={{
-          x: direction === 'ltr' ? [-40, 40] : [40, -40],
-          opacity: [0, 1, 0],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          delay: i * 0.65,
-          ease: 'easeInOut',
-        }}
+        className="absolute w-2 h-2 rounded-full bg-brand-green shadow shadow-brand-green/40"
+        animate={{ x: direction === 'ltr' ? [-30, 30] : [30, -30], opacity: [0, 1, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.6, ease: 'easeInOut' }}
       />
     ))}
   </div>
@@ -199,13 +218,13 @@ const BridgeSection = () => {
 
         {/* Diagram */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex items-center justify-center gap-4 md:gap-8 mb-16 flex-wrap"
+          className="flex items-center justify-center gap-2 md:gap-6 mb-16 overflow-x-auto scrollbar-hide py-4"
         >
           <PersonCard
-            icon={<Stethoscope size={36} />}
+            icon={<Stethoscope size={34} />}
             title="Healthcare Provider"
             subtitle="Physician · Geriatrician · Nurse"
             tags={['Diagnostics', 'Care Plans', 'Review']}
@@ -214,7 +233,7 @@ const BridgeSection = () => {
           <AgentOrb />
           <DataFlow direction="rtl" />
           <PersonCard
-            icon={<User size={36} />}
+            icon={<User size={34} />}
             title="Patient & Family"
             subtitle="Elder · Caregiver · Loved One"
             tags={['Insights', 'Alerts', 'Wellness']}
@@ -233,7 +252,7 @@ const BridgeSection = () => {
               className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
             >
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${f.color}`}>
-                {i === 0 ? <Activity size={18} /> : i === 1 ? <Brain size={18} /> : i === 2 ? <Stethoscope size={18} /> : <User size={18} />}
+                {f.icon}
               </div>
               <h4 className="font-bold text-brand-navy text-sm mb-2">{f.title}</h4>
               <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
@@ -246,18 +265,16 @@ const BridgeSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.9, duration: 0.6 }}
-          className="mt-12 flex flex-wrap items-center justify-center gap-8 text-center"
+          className="mt-12 flex flex-wrap items-center justify-center gap-8 md:gap-16 text-center"
         >
           {[
-            { v: '6', u: '+', l: 'Specialized Agents' },
-            { v: '200', u: '+', l: 'Biomarkers Tracked' },
-            { v: '0.02', u: 's', l: 'Agent Response Time' },
-            { v: '24', u: '/7', l: 'Continuous Monitoring' },
+            { v: '6+', l: 'Specialized Agents' },
+            { v: '200+', l: 'Biomarkers Tracked' },
+            { v: '0.02s', l: 'Agent Response Time' },
+            { v: '24/7', l: 'Continuous Monitoring' },
           ].map((item) => (
             <div key={item.l} className="flex flex-col items-center">
-              <span className="text-3xl font-black text-brand-brightblue font-mono">
-                {item.v}<span className="text-brand-green">{item.u}</span>
-              </span>
+              <span className="text-3xl font-black text-brand-brightblue font-mono">{item.v}</span>
               <span className="text-xs text-gray-400 font-medium mt-1">{item.l}</span>
             </div>
           ))}
