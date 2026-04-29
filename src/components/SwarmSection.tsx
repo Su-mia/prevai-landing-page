@@ -174,60 +174,21 @@ const SwarmSection = () => {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7 }}
           >
-            <span className="section-badge mb-6 inline-flex bg-brand-brightblue/15 text-brand-brightblue border-brand-brightblue/25">
-              <Zap size={12} />
-              Live Swarm Activity
-            </span>
+            
 
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-6">
-              The Swarm is{' '}
-              <span className="text-gradient">Collaborating</span>{' '}
-              Right Now.
+              A Collaborative Health Wellness Agentic Swarm
             </h2>
 
-            <p className="text-gray-400 text-lg leading-relaxed mb-8">
-              Our architecture isn't a central brain — it's a distributed network.
-              Each 'Orb' processes locally, keeping your raw data private,
-              only sharing conclusions with the swarm to protect your identity.
-            </p>
-
-            {/* Features */}
-            <div className="space-y-5 mb-10">
-              {features.map((f, i) => (
-                <motion.div
-                  key={f.title}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.3 + i * 0.12, duration: 0.5 }}
-                  className="flex items-start gap-4"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-brand-brightblue/15 flex items-center justify-center text-brand-brightblue flex-shrink-0 border border-brand-brightblue/20">
-                    {f.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white text-sm mb-1">{f.title}</h4>
-                    <p className="text-sm text-gray-400 leading-relaxed">{f.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="rounded-2xl border-2 border-orange-300/20 p-6 mb-8">
+              <p className="text-orange-100 text-xl leading-relaxed">
+                Our architecture isn't a central brain — it's a distributed network.
+                Each 'Orb' processes locally, keeping your raw data private and
+                sharing only anonymized conclusions with the swarm to protect identity.
+              </p>
             </div>
 
-            {/* Agent status pills */}
-            <div className="flex flex-wrap gap-2">
-              {agentCards.map((a, i) => (
-                <motion.div
-                  key={a.name}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.6 + i * 0.1 }}
-                  className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1.5"
-                >
-                  <span className={`w-2 h-2 rounded-full ${a.color} animate-pulse`} />
-                  <span className="text-xs text-gray-300 font-medium">{a.name.split(' ')[0]}</span>
-                  <span className="text-xs text-gray-500 font-mono">{a.task}</span>
-                </motion.div>
-              ))}
-            </div>
+ 
           </motion.div>
 
           {/* Right — network visualization */}
@@ -250,16 +211,16 @@ const SwarmSection = () => {
             </div>
 
             {/* Floating stat */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 1, duration: 0.5 }}
               className="absolute -bottom-4 -left-4 bg-brand-darkcard border border-white/10 rounded-2xl p-4 shadow-xl"
             >
               <p className="text-xs text-gray-400 mb-1">ACCURACY RATING</p>
-              <p className="text-2xl font-black text-brand-green font-mono">99.8%</p>
+              <p className="text-3xl md:text-4xl font-black text-brand-green font-mono">99.8%</p>
               <p className="text-xs text-gray-500 mt-1">Peer-reviewed precision</p>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         </div>
       </div>

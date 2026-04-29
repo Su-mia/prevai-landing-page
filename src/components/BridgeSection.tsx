@@ -5,13 +5,13 @@ import { Stethoscope, User, Activity, Brain } from 'lucide-react'
 const features = [
   {
     title: 'Real-Time Health Streams',
-    desc: 'Continuous monitoring of 200+ biomarkers across genomic, metabolic, and clinical domains simultaneously.',
+    desc: 'Continuous monitoring of 200+ biomarkers across multiple domains simultaneously.',
     color: 'bg-brand-brightblue/10 text-brand-brightblue',
     icon: <Activity size={18} />,
   },
   {
     title: 'Cross-Domain Synthesis',
-    desc: 'Agents collaborate to surface correlations invisible to single-specialty care — the way a team of specialists would.',
+    desc: 'Agents collaborate to surface correlations invisible to single-specialty care.',
     color: 'bg-brand-green/10 text-brand-green',
     icon: <Brain size={18} />,
   },
@@ -31,12 +31,12 @@ const features = [
 
 // Node positions at radius=115 around center (140,140), 60° apart
 const NODES = [
-  { cx: 255,   cy: 140,   color: '#1B3FBE', label: 'Genomic' },
-  { cx: 197.5, cy: 239.6, color: '#00d4a0', label: 'Clinical' },
-  { cx: 82.5,  cy: 239.6, color: '#8b5cf6', label: 'Cognitive' },
-  { cx: 25,    cy: 140,   color: '#f59e0b', label: 'Imaging' },
-  { cx: 82.5,  cy: 40.4,  color: '#ef4444', label: 'Risk' },
-  { cx: 197.5, cy: 40.4,  color: '#06b6d4', label: 'Metabolic' },
+  { cx: 255,   cy: 140,   color: '#1B3FBE' },
+  { cx: 197.5, cy: 239.6, color: '#00d4a0' },
+  { cx: 82.5,  cy: 239.6, color: '#8b5cf6' },
+  { cx: 25,    cy: 140,   color: '#f59e0b' },
+  { cx: 82.5,  cy: 40.4,  color: '#ef4444' },
+  { cx: 197.5, cy: 40.4,  color: '#06b6d4' },
 ]
 
 const AgentOrb = () => (
@@ -82,7 +82,7 @@ const AgentOrb = () => (
           <g key={i} transform={`translate(${n.cx} ${n.cy})`} filter="url(#nodeShadow)">
             {/* White pill bg */}
             <circle r="15" fill="white" stroke="#e8eeff" strokeWidth="1.5" />
-            {/* Colored dot — counter-rotates so it stays a dot (not important for dots) */}
+            {/* Colored dot */}
             <circle r="6" fill={n.color} />
           </g>
         ))}
@@ -114,28 +114,6 @@ const AgentOrb = () => (
       />
       <circle cx="167" cy="140" r="3.5" fill="#00d4a0" />
 
-      {/* ── Agent label chips (static, outside the rotating group) ── */}
-      {NODES.map((n, i) => {
-        const rad = (i * 60 * Math.PI) / 180
-        // Place label slightly further out than the orbit radius
-        const lx = 140 + Math.cos(rad) * 148
-        const ly = 140 + Math.sin(rad) * 148
-        return (
-          <text
-            key={`lbl-${i}`}
-            x={lx} y={ly}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="9"
-            fontFamily="Inter, system-ui, sans-serif"
-            fontWeight="600"
-            fill={n.color}
-            opacity="0.85"
-          >
-            {n.label}
-          </text>
-        )
-      })}
     </svg>
   </div>
 )
@@ -210,9 +188,9 @@ const BridgeSection = () => {
             <span className="text-brand-green">Prevention</span>
           </h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
-            PrevAI sits at the intersection of clinical intelligence and patient
-            empowerment — a living, learning swarm that never sleeps, never
-            silos, never misses a pattern.
+            PrevAI Health sits at the intersection of clinical intelligence and patient
+            empowerment — a living, learning swarm that never sleeps and never
+            silos data.
           </p>
         </motion.div>
 

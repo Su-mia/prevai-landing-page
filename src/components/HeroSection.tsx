@@ -97,11 +97,11 @@ const HeroSection = () => {
                   whileTap={{ scale: 0.97 }}
                   className="btn-primary flex items-center gap-2 text-base"
                 >
-                  Explore Geriatric Solutions
+                  Explore our Solutions
                   <ArrowRight size={16} />
                 </motion.button>
               </a>
-              <a href="#swarm">
+              {/* <a href="#swarm">
                 <motion.button
                   whileHover={{ scale: 1.04, y: -2 }}
                   whileTap={{ scale: 0.97 }}
@@ -109,11 +109,11 @@ const HeroSection = () => {
                 >
                   Meet the Swarm
                 </motion.button>
-              </a>
+              </a> */}
             </motion.div>
 
             {/* Trust signals */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
@@ -128,7 +128,7 @@ const HeroSection = () => {
                 <span className="font-semibold text-brand-navy">100,000+</span>{' '}
                 early adopters on the waitlist
               </p>
-            </motion.div>
+            </motion.div> */}
           </div>
 
           {/* Right — hero visual */}
@@ -158,21 +158,21 @@ const HeroSection = () => {
               {/* Floating agent cards */}
               <AgentCard
                 icon={<Dna size={16} />}
-                name="Genomic Agent"
+                name="Nutritionist Agent"
                 status="Synthesizing markers..."
                 delay={0.5}
                 className="-top-5 right-4 md:right-0 md:-right-6"
               />
               <AgentCard
                 icon={<Activity size={16} />}
-                name="Clinical Agent"
+                name="Medical Expert Agent"
                 status="Vitals stable. Alert off."
                 delay={0.7}
                 className="-bottom-4 left-2 md:-left-6"
               />
               <AgentCard
                 icon={<Brain size={16} />}
-                name="Cognitive Agent"
+                name="Fitness Coach Agent"
                 status="Pattern analysis active"
                 delay={0.9}
                 className="top-1/2 -translate-y-1/2 -right-2 md:-right-8 hidden md:flex"
