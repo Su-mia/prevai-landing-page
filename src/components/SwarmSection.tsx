@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Dna, Activity, Brain, Eye, Shield, Cpu, Zap, Lock, Users } from 'lucide-react'
+import { Cpu } from 'lucide-react'
 
 const NODE_POSITIONS = [
   { x: 50, y: 50, size: 14, delay: 0 },
@@ -24,32 +24,6 @@ const CONNECTIONS = [
   [6, 10], [7, 10], [9, 11], [0, 11],
 ]
 
-const agentCards = [
-  { icon: <Dna size={16} />, name: 'Genomic Agent', task: 'SNP risk profiling...', color: 'bg-blue-500' },
-  { icon: <Activity size={16} />, name: 'Clinical Agent', task: 'Vitals stream: nominal', color: 'bg-green-500' },
-  { icon: <Brain size={16} />, name: 'Cognitive Agent', task: 'Neuro pattern scan +', color: 'bg-purple-500' },
-  { icon: <Eye size={16} />, name: 'Imaging Agent', task: 'Retinal analysis done', color: 'bg-yellow-500' },
-  { icon: <Shield size={16} />, name: 'Risk Agent', task: 'CVD score: low (2.1%)', color: 'bg-red-400' },
-  { icon: <Cpu size={16} />, name: 'Metabolic Agent', task: 'HbA1c trend stable', color: 'bg-cyan-500' },
-]
-
-const features = [
-  {
-    icon: <Lock size={18} />,
-    title: 'Zero-Knowledge Proof Swarm',
-    desc: 'Raw health data never leaves your device. Only anonymized conclusions are shared.',
-  },
-  {
-    icon: <Zap size={18} />,
-    title: 'Orb-to-Orb Communication',
-    desc: '0.02s latency for real-time risk cross-referencing between specialized agents.',
-  },
-  {
-    icon: <Users size={18} />,
-    title: 'Collaborative Intelligence',
-    desc: 'Six agents peer-review each insight, eliminating single-point diagnostic failures.',
-  },
-]
 
 const SwarmViz = ({ inView }: { inView: boolean }) => (
   <div className="relative w-full aspect-square max-w-md mx-auto">
